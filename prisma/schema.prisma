@@ -20,13 +20,13 @@ enum Status {
 }
 
 model User {
-  id       Int    @id @default(autoincrement())
+  id       String @id @default(uuid())
   username String @unique
   password String
 }
 
 model Company {
-  id      Int     @id @default(autoincrement())
+  id      String  @id @default(uuid())
   ticker  String? @unique
   name    String  @unique
   country String?
@@ -39,13 +39,32 @@ model Company {
   updatedAt DateTime @updatedAt
 
   sources Source[]
+  brands  Brand[]
 }
 
 model Source {
-  id    Int    @id @default(autoincrement())
+  id    String @id @default(uuid())
   title String
   link  String
 
-  companyId Int
-  company   Company @relation(fields: [companyId], references: [id])
+  companyId String
+  company   Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
+}
+
+model Brand {
+  id   String @id @default(cuid())
+  name String
+
+  companyId String
+  company   Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
+
+  products Product[]
+}
+
+model Product {
+  id   String @id @default(cuid())
+  name String
+
+  brandId String
+  brand   Brand  @relation(fields: [brandId], references: [id], onDelete: Cascade)
 }
