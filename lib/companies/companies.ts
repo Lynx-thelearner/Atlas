@@ -122,7 +122,6 @@ export async function updateCompany(
     if (data.brands) {
       updateData.brands = {
         deleteMany: {},
-        // Perbaikan mapping nested create untuk Product
         create: data.brands.map((brand) => ({
           name: brand.name,
           products: {
@@ -132,14 +131,13 @@ export async function updateCompany(
       };
     }
 
-    // 3. Eksekusi query (Perbaikan salah ketik dari 'compay' ke 'company')
     return await prisma.company.update({
       where: { id },
       data: updateData,
     });
     
   } catch (error) {
-    console.error(`Failed to update company id: ${id} with error:`, error);
+    console.error(`Failed to update company, id: ${id} with error:`, error);
     return null;
   }
 }
